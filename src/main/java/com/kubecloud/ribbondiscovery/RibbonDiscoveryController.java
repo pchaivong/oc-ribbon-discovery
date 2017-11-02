@@ -79,4 +79,14 @@ public class RibbonDiscoveryController {
         return resp + "\n Time usage: " + delayed;
 
     }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String ping(){
+        try {
+            Thread.sleep(delayConfiguration.getDelayed());
+        } catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return "OK";
+    }
 }
