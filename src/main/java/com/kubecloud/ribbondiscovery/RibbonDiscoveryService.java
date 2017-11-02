@@ -20,7 +20,7 @@ public class RibbonDiscoveryService {
 
 
     public String getHostname(){
-        return this.restTemplate.getForObject("http://ribbon-discovery/hostname", String.class);
+        return this.restTemplate.getForObject("http://oc-ribbon-discovery/hostname", String.class);
     }
 
     public String fallback(){

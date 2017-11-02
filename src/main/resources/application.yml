@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ribbon-discovery
+    name: oc-ribbon-discovery
 
 server:
   port: 8080
