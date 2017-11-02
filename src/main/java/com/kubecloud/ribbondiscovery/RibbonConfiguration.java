@@ -2,17 +2,17 @@ package com.kubecloud.ribbondiscovery;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.client.config.IClientConfigKey;
-import com.netflix.loadbalancer.AvailabilityFilteringRule;
-import com.netflix.loadbalancer.IPing;
-import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.PingUrl;
+import com.netflix.loadbalancer.*;
+import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.openshift.client.OpenShiftClient;
 import io.fabric8.spring.cloud.kubernetes.ribbon.KubernetesServerList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+
 
 /**
  * Created by pchaivong on 10/10/2017 AD.
@@ -30,7 +30,7 @@ public class RibbonConfiguration {
 
     @Bean
     public IRule ribbonRule(IClientConfig config){
-        return new AvailabilityFilteringRule();
+        return new WeightedResponseTimeRule();
     }
 
     @Bean
