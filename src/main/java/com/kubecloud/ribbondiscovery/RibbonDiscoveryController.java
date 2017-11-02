@@ -3,16 +3,12 @@ package com.kubecloud.ribbondiscovery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Random;
 
 /**
  * Created by pchaivong on 10/10/2017 AD.
@@ -57,8 +53,8 @@ public class RibbonDiscoveryController {
     public String hostName(){
 
         try {
-            logger.info("Sleep for: " + delayConfiguration.getDelayed() + " seconds");
-            Thread.sleep(delayConfiguration.getDelayed() * 1000);
+            logger.info("Sleep for: " + delayConfiguration.getDelayed() + " ms");
+            Thread.sleep(delayConfiguration.getDelayed());
 
         } catch (Exception e){
             logger.error(e.getMessage());
