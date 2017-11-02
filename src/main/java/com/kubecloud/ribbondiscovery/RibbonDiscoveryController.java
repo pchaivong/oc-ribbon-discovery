@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Random;
 
@@ -36,7 +38,7 @@ public class RibbonDiscoveryController {
         long start = System.currentTimeMillis();
         String resp = this.ribbonDiscoveryService.getHostname();
         long delayed = System.currentTimeMillis() - start;
-        logger.info("Time usage: " + delayed + " secs");
+        logger.info("Time usage: " + delayed + " ms");
         return resp + "\n Time usage: " + delayed;
     }
 
@@ -51,5 +53,19 @@ public class RibbonDiscoveryController {
             logger.error(e.getMessage());
         }
         return this.hostName;
+    }
+
+    @RequestMapping(value = "/server-lb", method = RequestMethod.GET)
+    public String serverLb(){
+        logger.info("Consume services by Server side load balancing");
+
+
+        RestTemplate template = new RestTemplate();
+        long start = System.currentTimeMillis();
+        String resp = template.getForObject("http://oc-ribbon-discovery/hostname", String.class);
+        long delayed = System.currentTimeMillis() - start;
+        logger.info("Time usage: " + delayed + " ms");
+        return resp + "\n Time usage: " + delayed;
+
     }
 }
