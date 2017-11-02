@@ -29,8 +29,9 @@ public class RibbonDiscoveryController {
         logger.info("Get hostname from service");
         long start = System.currentTimeMillis();
         String resp = this.ribbonDiscoveryService.getHostname();
-        logger.info("Time usage: " + (System.currentTimeMillis()-start) + " ms");
-        return resp;
+        long delayed = System.currentTimeMillis() - start;
+        logger.info("Time usage: " + delayed + " ms");
+        return resp + "\n Time usage: " + delayed;
     }
 
     @RequestMapping(value = "/hostname", method = RequestMethod.GET)
