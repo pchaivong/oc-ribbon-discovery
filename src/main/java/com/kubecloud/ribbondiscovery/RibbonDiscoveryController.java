@@ -2,9 +2,11 @@ package com.kubecloud.ribbondiscovery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,21 +18,30 @@ import java.util.Random;
  * Created by pchaivong on 10/10/2017 AD.
  */
 
-@RefreshScope
 @RestController
 public class RibbonDiscoveryController {
 
     private final String hostName = System.getenv("HOSTNAME");
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${ribbon-discovery.delayed: 0}")
-    private long delayed;
 
     private RibbonDiscoveryService ribbonDiscoveryService;
+    private DelayConfiguration delayConfiguration;
 
-    public RibbonDiscoveryController(RibbonDiscoveryService ribbonDiscoveryService){
+    @Autowired
+    public RibbonDiscoveryController(RibbonDiscoveryService ribbonDiscoveryService,
+                                     DelayConfiguration delayConfiguration){
         this.ribbonDiscoveryService = ribbonDiscoveryService;
+        this.delayConfiguration = delayConfiguration;
+        this.delayConfiguration.setDelayed(0);
     }
+
+    @RequestMapping(value = "/delayed/{ms}", method = RequestMethod.GET)
+    public String setDelay(@PathVariable long ms){
+        this.delayConfiguration.setDelayed(ms);
+        return hostName + " is delayed for " + ms + " ms";
+    }
+
 
     @RequestMapping(value = "/entry", method = RequestMethod.GET)
     public String entryPoint(){
@@ -46,8 +57,8 @@ public class RibbonDiscoveryController {
     public String hostName(){
 
         try {
-            logger.info("Sleep for: " + delayed + " seconds");
-            Thread.sleep(delayed * 1000);
+            logger.info("Sleep for: " + delayConfiguration.getDelayed() + " seconds");
+            Thread.sleep(delayConfiguration.getDelayed() * 1000);
 
         } catch (Exception e){
             logger.error(e.getMessage());

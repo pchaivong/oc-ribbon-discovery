@@ -41,4 +41,9 @@ public class RibbonConfiguration {
                 .set(IClientConfigKey.Keys.NIWSServerListClassName, KubernetesServerList.class.getName());
     }
 
+    @Bean
+    public DelayConfiguration delayConfiguration(){
+        return new DelayConfiguration();
+    }
+
 }
